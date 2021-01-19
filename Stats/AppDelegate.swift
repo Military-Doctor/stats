@@ -53,6 +53,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         modules.forEach{ $0.mount() }
         
         self.settingsWindow.setModules()
+        self.statusTouchbarWindow.setTouchbar()
         
         self.parseVersion()
         self.defaultValues()

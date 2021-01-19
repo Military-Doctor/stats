@@ -16,6 +16,7 @@ public protocol Module_p {
     
     var widget: Widget_p? { get }
     var settings: Settings_p? { get }
+    var touchbar: Touchbar_p? { get }
     
     func mount()
     func unmount()
@@ -74,9 +75,11 @@ open class Module: Module_p {
     public var enabled: Bool = false
     
     public var widget: Widget_p? = nil
-    public var settings: Settings_p? = nil
+    public var touchbar: Touchbar_p? = nil
     
+    public var settings: Settings_p? = nil
     private var settingsView: Settings_v? = nil
+    
     private var popup: PopupWindow? = nil
     private var popupView: Popup_p? = nil
     

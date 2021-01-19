@@ -61,6 +61,19 @@ public struct GPUs: value_t {
     }
 }
 
+public class TouchbarGPU : Touchbar_p {
+    
+    public var identifier = NSTouchBarItem.Identifier("eu.exelban.Stats.touchbar.GPU")
+    
+    public var label: String
+    
+    public var view: NSView!
+    
+    public init(){
+        self.label = "Hello I'm GPU"
+    }
+}
+
 public class GPU: Module {
     private let smc: UnsafePointer<SMCService>?
     private let store: UnsafePointer<Store>
@@ -88,7 +101,7 @@ public class GPU: Module {
             settings: self.settingsView
         )
         guard self.available else { return }
-        
+        self.touchbar = TouchbarGPU()
         self.infoReader = InfoReader()
         self.infoReader?.smc = smc
         self.selectedGPU = store.pointee.string(key: "\(self.config.name)_gpu", defaultValue: self.selectedGPU)

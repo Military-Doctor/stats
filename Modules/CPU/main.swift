@@ -25,6 +25,18 @@ public struct CPU_Load: value_t {
     }
 }
 
+public class TouchbarCPU : Touchbar_p{
+    public var identifier = NSTouchBarItem.Identifier("eu.exelban.Stats.touchbar.CPU")
+    
+    public var label: String
+    
+    public var view: NSView!
+    
+    public init(){
+        self.label = "CPU in Touchbar!"
+    }
+}
+
 public class CPU: Module {
     private var popupView: Popup
     private var settingsView: Settings
@@ -43,6 +55,9 @@ public class CPU: Module {
     }
     
     public init(_ store: UnsafePointer<Store>, _ smc: UnsafePointer<SMCService>) {
+        
+       
+        
         self.store = store
         self.smc = smc
         self.settingsView = Settings("CPU", store: store)
@@ -54,6 +69,8 @@ public class CPU: Module {
             settings: self.settingsView
         )
         guard self.available else { return }
+        
+        self.touchbar = TouchbarCPU()
         
         self.loadReader = LoadReader()
         self.loadReader?.store = store
