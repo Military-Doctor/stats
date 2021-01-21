@@ -142,6 +142,7 @@ internal class UsageReader: Reader<Battery_Usage> {
 }
 
 public class ProcessReader: Reader<[TopProcess]> {
+    private var taskLock = NSLock() // is running
     private var task: Process? = nil
     private var initialized: Bool = false
     
@@ -174,6 +175,12 @@ public class ProcessReader: Reader<[TopProcess]> {
         }
         
         DispatchQueue.global().async {
+            
+            if self.taskLock.try() == false {
+                //print("Top: Failed to acquire a lock, top is running")
+                return
+            }
+            
             self.task = Process()
             let pipe = Pipe()
             
@@ -215,17 +222,25 @@ public class ProcessReader: Reader<[TopProcess]> {
             }
 
             self.task?.launch()
+            //print("Top: running")
             self.task?.waitUntilExit()
+            self.taskLock.unlock()
+            //print("Top: exited")
         }
     }
     
     public override func stop() {
         if self.task == nil || !self.task!.isRunning {
+            //print("Top: is not running or has been interrupted")
             return
         }
         
-        self.task?.interrupt()
-        self.task = nil
+        if self.taskLock.try() == false { // task is running
+            self.task?.terminate()
+            self.task = nil
+            //print("Top: interrupt")
+            return
+        }
     }
     
     public override func read() {
