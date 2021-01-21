@@ -14,6 +14,7 @@ public protocol Touchbar_p {
     
     var identifier : NSTouchBarItem.Identifier  { get }
     var label      : String                     { get set }
+    var text       : String                     { get set }
     var view       : NSView!                    { get set }
     
     //init()

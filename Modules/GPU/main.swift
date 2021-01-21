@@ -66,11 +66,12 @@ public class TouchbarGPU : Touchbar_p {
     public var identifier = NSTouchBarItem.Identifier("eu.exelban.Stats.touchbar.GPU")
     
     public var label: String
-    
+    public var text: String
     public var view: NSView!
     
     public init(){
-        self.label = "Hello I'm GPU"
+        self.label = "GPU"
+        self.text = "1%"
     }
 }
 

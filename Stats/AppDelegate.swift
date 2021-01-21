@@ -35,7 +35,6 @@ var modules: [Module] = [
 var log = OSLog(subsystem: Bundle.main.bundleIdentifier!, category: "Stats")
 
 class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDelegate {
-    internal let statusTouchbarWindow: StatsTouchbarWindow = StatsTouchbarWindow()
     internal let settingsWindow: SettingsWindow = SettingsWindow()
     internal let updateNotification = NSUserNotification()
     
@@ -53,7 +52,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSUserNotificationCenterDele
         modules.forEach{ $0.mount() }
         
         self.settingsWindow.setModules()
-        self.statusTouchbarWindow.setTouchbar()
+        StatsTouchbarHelper.shared.addTrayItem()
         
         self.parseVersion()
         self.defaultValues()

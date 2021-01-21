@@ -84,7 +84,19 @@ struct DiskList: value_t {
         }
     }
 }
-
+public class TouchbarDisk : Touchbar_p {
+    
+    public var identifier = NSTouchBarItem.Identifier("eu.exelban.Stats.touchbar.DISK")
+    
+    public var label: String
+    public var text: String
+    public var view: NSView!
+    
+    public init(){
+        self.label = "DISK"
+        self.text = "99%"
+    }
+}
 public class Disk: Module {
     private let popupView: Popup = Popup()
     private var capacityReader: CapacityReader? = nil
@@ -100,7 +112,7 @@ public class Disk: Module {
             settings: self.settingsView
         )
         guard self.available else { return }
-        
+        self.touchbar = TouchbarDisk()
         self.capacityReader = CapacityReader()
         self.capacityReader?.store = store
         self.selectedDisk = store.pointee.string(key: "\(self.config.name)_disk", defaultValue: self.selectedDisk)

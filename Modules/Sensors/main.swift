@@ -12,7 +12,19 @@
 import Cocoa
 import ModuleKit
 import StatsKit
-
+public class TouchbarSensor : Touchbar_p {
+    
+    public var identifier = NSTouchBarItem.Identifier("eu.exelban.Stats.touchbar.SENSOR")
+    
+    public var label: String
+    public var text: String
+    public var view: NSView!
+    
+    public init(){
+        self.label = "SENS"
+        self.text = "62°C"
+    }
+}
 public class Sensors: Module {
     private var sensorsReader: SensorsReader
     private let popupView: Popup = Popup()
@@ -28,7 +40,7 @@ public class Sensors: Module {
             settings: self.settingsView
         )
         guard self.available else { return }
-        
+        self.touchbar = TouchbarSensor()
         self.checkIfNoSensorsEnabled()
         self.popupView.setup(self.sensorsReader.list)
         

@@ -48,7 +48,19 @@ public struct Swap {
     var used: Double
     var free: Double
 }
-
+public class TouchbarRAM : Touchbar_p {
+    
+    public var identifier = NSTouchBarItem.Identifier("eu.exelban.Stats.touchbar.RAM")
+    
+    public var label: String
+    public var text: String
+    public var view: NSView!
+    
+    public init(){
+        self.label = "RAM"
+        self.text = "83%"
+    }
+}
 public class RAM: Module {
     private var settingsView: Settings
     private let popupView: Popup
@@ -65,7 +77,7 @@ public class RAM: Module {
             settings: self.settingsView
         )
         guard self.available else { return }
-        
+        self.touchbar = TouchbarRAM()
         self.settingsView.setInterval = { [unowned self] value in
             self.processReader?.read()
             self.usageReader?.setInterval(value)
