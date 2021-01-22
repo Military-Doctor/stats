@@ -64,7 +64,19 @@ public struct Network_Process {
     var upload: Int = 0
     var icon: NSImage? = nil
 }
-
+public class TouchbarNetwork : Touchbar_p {
+    
+    public var identifier = NSTouchBarItem.Identifier("eu.exelban.Stats.touchbar.NETWORK")
+    
+    public var label: String
+    public var text: String
+    public var view: NSView!
+    
+    public init(){
+        self.label = "NET"
+        self.text = "NETWORK"
+    }
+}
 public class Network: Module {
     private var popupView: Popup
     private var settingsView: Settings
@@ -82,7 +94,7 @@ public class Network: Module {
             settings: self.settingsView
         )
         guard self.available else { return }
-        
+        self.touchbar = TouchbarNetwork()
         self.usageReader = UsageReader()
         self.usageReader?.store = store
         

@@ -160,14 +160,15 @@ class StatsTouchbarRectContainer: NSView {
 
 class StatsTouchbarLabeledText: NSCustomTouchBarItem {
 
-    public init(_ identifier: NSTouchBarItem.Identifier, _ label: String, _ text: String) {
+    public init(_ identifier: NSTouchBarItem.Identifier, _ label: String, _ text: String, _ widget: Widget_p) {
         super.init(identifier: identifier)
         // MAX HEIGHT: 30
         let container = StatsTouchbarRectContainer(frame: NSRect(x: 0, y: 0, width: 0, height: 30), color: NSColor.black)
-        let labeledTextView = StatsTouchbarLabeledTextView(label: label, text: text)
+        //let labeledTextView = StatsTouchbarLabeledTextView(label: label, text: text)
 
-        container.addSubview(labeledTextView)
+        container.setBoundsOrigin(NSPoint(x: 0, y: -4)) // make widget vertically centered
 
+        container.addSubview(widget)
         self.view = container
     }
 
@@ -180,7 +181,7 @@ class StatsTouchbarLabeledText: NSCustomTouchBarItem {
 public class StatsTouchBar: NSTouchBar {
 
     // use identifier as index, getting Touchbar_p structure.
-    var touchbarDict: [NSTouchBarItem.Identifier: Touchbar_p] = [:]
+    var touchbarDict: [NSTouchBarItem.Identifier: Module] = [:]
 
     public init(_ moduleList: UnsafeMutablePointer<[Module]>) {
         super.init()
@@ -198,7 +199,7 @@ public class StatsTouchBar: NSTouchBar {
         defaultItemIdentifiers.removeAll()
         for m in list.pointee {
             if m.touchbar != nil {
-                self.touchbarDict[m.touchbar!.identifier] = m.touchbar!
+                self.touchbarDict[m.touchbar!.identifier] = m
                 defaultItemIdentifiers.append(m.touchbar!.identifier)
             }
         }
@@ -208,17 +209,12 @@ public class StatsTouchBar: NSTouchBar {
 @available(OSX 10.12.2, *)
 extension StatsTouchBar: NSTouchBarDelegate {
     public func touchBar(_ touchBar: NSTouchBar, makeItemForIdentifier identifier: NSTouchBarItem.Identifier) -> NSTouchBarItem? {
-        let label = touchbarDict[identifier]!.label
-        let text = touchbarDict[identifier]!.text
-        if label == "STATS IS" {
-            return StatsTouchbarLabeledText(identifier, label, text)
-        } else if label == "DISK" {
-            return StatsTouchbarButton(identifier: identifier, title: label, bkgColor: NSColor.systemYellow)
-        } else if label == "SENS" {
-            return StatsTouchbarButton(identifier: identifier, title: label, bkgColor: NSColor.systemBlue)
-        } else {
-            return StatsTouchbarButton(identifier: identifier, title: label, bkgColor: NSColor.systemGreen)
-        }
+        let label = touchbarDict[identifier]!.touchbar!.label
+        let text = touchbarDict[identifier]!.touchbar!.text
+        let widget = touchbarDict[identifier]?.widget
+        return StatsTouchbarLabeledText(identifier, label, text, widget!)
+        // return StatsTouchbarLabeledText(identifier, label, text, widget!)
+        // return StatsTouchbarButton(identifier: identifier, title: label, bkgColor: NSColor.systemYellow)
         // TODO: Widget type recognize
     }
 }

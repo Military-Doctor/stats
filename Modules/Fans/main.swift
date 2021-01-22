@@ -32,7 +32,19 @@ public struct Fan {
         }
     }
 }
-
+public class TouchbarFans : Touchbar_p {
+    
+    public var identifier = NSTouchBarItem.Identifier("eu.exelban.Stats.touchbar.FANS")
+    
+    public var label: String
+    public var text: String
+    public var view: NSView!
+    
+    public init(){
+        self.label = "FANS"
+        self.text = "FANSFANS"
+    }
+}
 public class Fans: Module {
     private let store: UnsafePointer<Store>
     private var smc: UnsafePointer<SMCService>
@@ -53,7 +65,7 @@ public class Fans: Module {
             settings: self.settingsView
         )
         guard self.available else { return }
-        
+        self.touchbar = TouchbarFans()
         self.checkIfNoSensorsEnabled()
         self.popupView.setup(self.fansReader.list)
         

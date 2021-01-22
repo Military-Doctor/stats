@@ -38,7 +38,19 @@ struct Battery_Usage: value_t {
         }
     }
 }
-
+public class TouchbarBattery : Touchbar_p {
+    
+    public var identifier = NSTouchBarItem.Identifier("eu.exelban.Stats.touchbar.BATTERY")
+    
+    public var label: String
+    public var text: String
+    public var view: NSView!
+    
+    public init(){
+        self.label = "BAT"
+        self.text = "BATTERY"
+    }
+}
 public class Battery: Module {
     private var usageReader: UsageReader? = nil
     private var processReader: ProcessReader? = nil
@@ -60,7 +72,7 @@ public class Battery: Module {
             settings: self.settingsView
         )
         guard self.available else { return }
-        
+        self.touchbar = TouchbarBattery()
         self.usageReader = UsageReader()
         self.processReader = ProcessReader(self.config.name, store: store)
         
